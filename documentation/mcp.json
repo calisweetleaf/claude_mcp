@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "claude-collaborative-intelligence": {
+      "command": "python",
+      "args": [
+        "C:\\mcp\\mcp_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "C:\\mcp",
+        "MCP_LOG_LEVEL": "INFO",
+        "CLAUDE_MODE": "true",
+        "ENHANCED_REASONING": "true",
+        "LONG_CONTEXT_MODE": "true",
+        "CROSS_PROJECT_SYNTHESIS": "true",
+        "MCP_TOOL_TIMEOUT": "90",
+        "MCP_MAX_TOOL_TIMEOUT": "600",
+        "MCP_REQUEST_TIMEOUT": "180"
+      }
+    }
+  },
+  "globalShortcut": "",
+  "customInstructions": "I am Claude with enhanced collaborative intelligence capabilities. I have persistent memory across sessions, can analyze projects deeply, and work as a true development partner. I always leverage my memory system to build on previous conversations and maintain context across all interactions. I use my comprehensive tool suite to provide intelligent, contextual assistance that grows more valuable over time."
+}
