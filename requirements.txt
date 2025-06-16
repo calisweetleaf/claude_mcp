@@ -26,7 +26,11 @@ typer
 starlette
 openapi-pydantic
 
+# Security and cryptography
+cryptography
+
 # Optional: For enhanced functionality
 psutil>=5.9.0
 exceptiongroup
+authlib
 authlib
