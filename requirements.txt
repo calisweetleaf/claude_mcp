@@ -1,19 +1,32 @@
 # Claude MCP Server Dependencies
 # Install with: pip install -r requirements.txt
 
+# Core MCP dependencies
 fastmcp
 mcp
+
+# HTTP/SSE transport dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sse-starlette
+
+# HTTP and web functionality
 httpx
-openapi-pydantic
+requests>=2.28.0
+
+# Data processing and validation
 pydantic
 python-dotenv
+
+# CLI and output formatting
 rich
 typer
-sse-starlette
+
+# Additional web server dependencies
 starlette
-uvicorn
+openapi-pydantic
+
 # Optional: For enhanced functionality
 psutil>=5.9.0
-requests>=2.28.0
 exceptiongroup
 authlib

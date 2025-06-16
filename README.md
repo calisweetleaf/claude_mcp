@@ -155,9 +155,54 @@ Located in: `code_analysis_tool.py`
 
 The Claude MCP Server supports **two integration methods** with Claude Desktop:
 
-### 📋 Method 1: Local MCP Server (Recommended)
+### 🌐 Method 1: Remote Integration URL (Recommended - 2025)
 
-Configure your `claude_desktop_config.json` file:
+**For Claude Desktop's new integration system** that requires URLs instead of direct connections:
+
+#### Quick Start - HTTP Server
+
+1. **Install dependencies:**
+
+   ```bash
+   pip install fastapi uvicorn
+   ```
+
+2. **Start HTTP server:**
+
+   ```bash
+   # Option A: Python launcher
+   python start_http_server.py
+
+   # Option B: PowerShell (Windows)
+   .\start_http_server.ps1
+
+   # Option C: Direct command
+   python mcp_server.py --http --host 0.0.0.0 --port 8000
+   ```
+
+3. **Configure Claude Desktop:**
+   - Open Claude Desktop
+   - Go to **Settings > Integrations**
+   - Click **"Add more"** or **"Custom Integration"**
+   - Enter URL: `http://localhost:8000/mcp/sse`
+   - Save and restart Claude Desktop
+
+4. **Verify connection:**
+   - Look for the tools icon in Claude Desktop chat
+   - Test with: "Use bb7_welcome to introduce yourself"
+
+#### Available Endpoints
+
+Once running, your server provides:
+
+- **Server info:** `http://localhost:8000/`
+- **Health check:** `http://localhost:8000/health`
+- **Tools list:** `http://localhost:8000/mcp/tools`
+- **SSE endpoint:** `http://localhost:8000/mcp/sse` ← Use this in Claude Desktop
+
+### 📋 Method 2: Local MCP Server (Legacy)
+
+For older Claude Desktop versions that support local configuration:
 
 **Windows Location:** `C:\Users\{username}\AppData\Roaming\Claude\claude_desktop_config.json`
 
@@ -177,13 +222,7 @@ Configure your `claude_desktop_config.json` file:
 }
 ```
 
-### 🌐 Method 2: Remote Integration URL (Beta)
-
-For Claude Max/Team/Enterprise plans with remote MCP server support:
-
-1. Deploy server as HTTP/SSE endpoint (see [Remote Deployment](#remote-deployment))
-2. Add integration URL in Claude Desktop: **Settings > Integrations > Add more**
-3. Paste your server URL: `https://your-domain.com/mcp/sse`
+**Note:** This method may not work with newer Claude Desktop versions that require integration URLs.
 
 ## 🚀 Usage Examples
 
