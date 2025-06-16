@@ -2,7 +2,7 @@
 # Claude MCP Server Dependencies
 # Install with: pip install -r requirements.txt
 
-# fast-mcp-server>=0.1.0
+# fastmcp>=0.1.0
 # Handles MCP protocol implementation and tool registration
 
 # Standard library dependencies (included with Python)
