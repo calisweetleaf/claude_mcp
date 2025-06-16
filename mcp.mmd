@@ -1,0 +1,154 @@
+---
+title: Claude MCP Server Architecture
+---
+flowchart TB
+    subgraph "Claude Desktop Environment"
+        CD["🤖 Claude Desktop<br/>Application"]
+        CFG["⚙️ Configuration<br/>claude_desktop_config.json"]
+    end
+    
+    subgraph "MCP Protocol Layer"
+        MCP["📡 MCP Channel<br/>JSON-RPC Communication"]
+        STDIO["💻 STDIO Transport<br/>Standard Input/Output"]
+        HTTP["🌐 HTTP/SSE Transport<br/>Server-Sent Events"]
+    end
+    
+    subgraph "Claude MCP Server"
+        direction TB
+        
+        subgraph "Core Server"
+            MS["🏠 Main Server<br/>mcp_server.py<br/>39+ bb7_ tools"]
+            INIT["🚀 Initialization<br/>Tool Registration"]
+            HEALTH["💚 Health Monitoring<br/>System Diagnostics"]
+        end
+        
+        subgraph "Tool Modules"
+            direction LR
+            MEM["🧠 Memory System<br/>memory_system.py<br/>6 tools"]
+            SESS["📊 Session Manager<br/>session_manager.py<br/>5 tools"]
+            PROJ["🔍 Project Context<br/>project_context.py<br/>3 tools"]
+            FILE["📁 File Operations<br/>file_tool.py<br/>7 tools"]
+            SHELL["💻 Shell Tools<br/>shell_tool.py<br/>7 tools"]
+            WEB["🌐 Web Tools<br/>web_tool.py<br/>4 tools"]
+            CODE["🔒 Code Analysis<br/>code_analysis_tool.py<br/>4 tools"]
+        end
+        
+        subgraph "Data & Storage Layer"
+            direction LR
+            DB["🗄️ SQLite Database<br/>bb7_memory.db<br/>Persistent Memory"]
+            FS["💾 File System<br/>Project Files & Logs"]
+            NET["🌍 Network Access<br/>Web APIs & Services"]
+            ENV["🔧 Environment<br/>Shell & System"]
+        end
+    end
+    
+    subgraph "Integration Methods"
+        direction LR
+        LOCAL["📋 Local Integration<br/>Command-line Server<br/>Direct STDIO"]
+        REMOTE["🌐 Remote Integration<br/>HTTP Server<br/>Integration URL"]
+    end
+    
+    %% Core Connections
+    CD --> CFG
+    CD --> MCP
+    MCP --> STDIO
+    MCP --> HTTP
+    STDIO --> MS
+    HTTP --> MS
+    
+    %% Server Internal Connections
+    MS --> INIT
+    MS --> HEALTH
+    INIT --> MEM
+    INIT --> SESS
+    INIT --> PROJ
+    INIT --> FILE
+    INIT --> SHELL
+    INIT --> WEB
+    INIT --> CODE
+    
+    %% Data Layer Connections
+    MEM --> DB
+    SESS --> DB
+    FILE --> FS
+    SHELL --> ENV
+    WEB --> NET
+    CODE --> FS
+    PROJ --> FS
+    
+    %% Integration Paths
+    STDIO --> LOCAL
+    HTTP --> REMOTE
+    
+    %% Memory System Detail
+    subgraph "Memory System Detail"
+        direction TB
+        STORE["💾 bb7_memory_store<br/>Save insights & context"]
+        SEARCH["🔍 bb7_memory_search<br/>Find relevant memories"]
+        RECALL["📋 bb7_memory_recall<br/>Retrieve specific memories"]
+        SYNTH["🧩 bb7_memory_synthesize<br/>Generate insights"]
+        CATS["📂 bb7_memory_list_categories<br/>Browse organization"]
+        INSIGHTS["💡 bb7_memory_insights<br/>Pattern analysis"]
+        
+        STORE --> DB
+        SEARCH --> DB
+        RECALL --> DB
+        SYNTH --> DB
+        CATS --> DB
+        INSIGHTS --> DB
+    end
+    
+    %% Session Management Detail
+    subgraph "Session Management Detail"
+        direction TB
+        START["🎯 bb7_start_session<br/>Begin goal tracking"]
+        RECORD["📝 bb7_record_insight<br/>Capture discoveries"]
+        DECIDE["⚖️ bb7_record_decision<br/>Document choices"]
+        SUMMARY["📊 bb7_session_summary<br/>Generate summaries"]
+        LIST["📋 bb7_list_sessions<br/>Browse history"]
+        
+        START --> DB
+        RECORD --> DB
+        DECIDE --> DB
+        SUMMARY --> DB
+        LIST --> DB
+    end
+    
+    %% Tool Categories
+    MEM -.-> STORE
+    MEM -.-> SEARCH
+    MEM -.-> RECALL
+    MEM -.-> SYNTH
+    MEM -.-> CATS
+    MEM -.-> INSIGHTS
+    
+    SESS -.-> START
+    SESS -.-> RECORD
+    SESS -.-> DECIDE
+    SESS -.-> SUMMARY
+    SESS -.-> LIST
+    
+    %% Styling
+    classDef serverCore fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef memoryModule fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef sessionModule fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef projectModule fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef fileModule fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef shellModule fill:#e0f2f1,stroke:#004d40,stroke-width:2px
+    classDef webModule fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px
+    classDef codeModule fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    classDef dataLayer fill:#fff8e1,stroke:#ff8f00,stroke-width:2px
+    classDef integration fill:#fafafa,stroke:#424242,stroke-width:2px
+    classDef claude fill:#e8eaf6,stroke:#3f51b5,stroke-width:3px
+    
+    class MS,INIT,HEALTH serverCore
+    class MEM,STORE,SEARCH,RECALL,SYNTH,CATS,INSIGHTS memoryModule
+    class SESS,START,RECORD,DECIDE,SUMMARY,LIST sessionModule
+    class PROJ projectModule
+    class FILE fileModule
+    class SHELL shellModule
+    class WEB webModule
+    class CODE codeModule
+    class DB,FS,NET,ENV dataLayer
+    class LOCAL,REMOTE integration
+    class CD,CFG claude

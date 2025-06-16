@@ -149,6 +149,392 @@ Located in: `code_analysis_tool.py`
 - **bb7_analyze_code** - Comprehensive code analysis with quality metrics
 - **bb7_code_suggestions** - AI-powered code improvement suggestions
 - **bb7_security_audit** - Security vulnerability scanning and recommendations
+- **bb7_execute_code_safely** - Execute code in isolated environments
+
+## 🔗 Claude Desktop Integration
+
+The Claude MCP Server supports **two integration methods** with Claude Desktop:
+
+### 📋 Method 1: Local MCP Server (Recommended)
+
+Configure your `claude_desktop_config.json` file:
+
+**Windows Location:** `C:\Users\{username}\AppData\Roaming\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "claude-mcp-server": {
+      "command": "python",
+      "args": [
+        "C:/Users/{username}/claude_mcp/mcp_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "C:/Users/{username}/claude_mcp"
+      }
+    }
+  }
+}
+```
+
+### 🌐 Method 2: Remote Integration URL (Beta)
+
+For Claude Max/Team/Enterprise plans with remote MCP server support:
+
+1. Deploy server as HTTP/SSE endpoint (see [Remote Deployment](#remote-deployment))
+2. Add integration URL in Claude Desktop: **Settings > Integrations > Add more**
+3. Paste your server URL: `https://your-domain.com/mcp/sse`
+
+## 🚀 Usage Examples
+
+### Basic Workflow
+
+```python
+# 1. Start collaborative session
+bb7_start_session(goal="Analyze project architecture")
+
+# 2. Analyze current project
+bb7_analyze_project_structure(path="/path/to/project")
+
+# 3. Store insights
+bb7_memory_store(
+    content="Key architectural patterns identified", 
+    category="analysis"
+)
+
+# 4. Get recommendations
+bb7_code_suggestions(file_path="src/main.py")
+```
+
+### Advanced Memory System
+
+```python
+# Store complex decisions
+bb7_record_decision(
+    decision="Migration to FastAPI", 
+    reasoning="Better async support",
+    alternatives=["Flask", "Django"]
+)
+
+# Smart memory search
+bb7_memory_search(query="API performance optimizations")
+
+# Memory synthesis
+bb7_memory_synthesize(topic="project architecture patterns")
+```
+
+### Project Health Assessment
+
+```python
+# Comprehensive health check
+bb7_project_health_check(path="/project/root")
+
+# Security audit
+bb7_security_audit(target="/src/")
+
+# Dependency analysis
+bb7_get_project_dependencies(path="/project")
+```
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    subgraph "Claude Desktop"
+        CD[Claude Interface]
+    end
+    
+    subgraph "MCP Protocol"
+        MCP[MCP Channel]
+    end
+    
+    subgraph "Claude MCP Server"
+        MS[Main Server<br/>mcp_server.py]
+        
+        subgraph "Core Modules"
+            MEM[Memory System<br/>memory_system.py]
+            SESS[Session Manager<br/>session_manager.py]
+            PROJ[Project Context<br/>project_context.py]
+            FILE[File Operations<br/>file_tool.py]
+            SHELL[Shell Tools<br/>shell_tool.py]
+            WEB[Web Tools<br/>web_tool.py]
+            CODE[Code Analysis<br/>code_analysis_tool.py]
+        end
+        
+        subgraph "Data Layer"
+            DB[(SQLite Database<br/>bb7_memory.db)]
+            FS[File System]
+            NET[Network Access]
+        end
+    end
+    
+    CD --> MCP
+    MCP --> MS
+    MS --> MEM
+    MS --> SESS
+    MS --> PROJ
+    MS --> FILE
+    MS --> SHELL
+    MS --> WEB
+    MS --> CODE
+    
+    MEM --> DB
+    FILE --> FS
+    WEB --> NET
+    SHELL --> FS
+    CODE --> FS
+    
+    style MS fill:#e1f5fe
+    style MEM fill:#f3e5f5
+    style SESS fill:#e8f5e8
+    style DB fill:#fff3e0
+```
+
+## 📊 Features Deep Dive
+
+### Persistent Memory System
+
+- **SQLite-based** persistent storage across sessions
+- **Smart categorization** with automatic tagging
+- **Advanced search** with relevance scoring
+- **Memory synthesis** for pattern recognition
+- **Insight generation** from stored knowledge
+
+### Session Management
+
+- **Goal-oriented** session tracking
+- **Decision documentation** with reasoning capture
+- **Insight recording** for knowledge building
+- **Session summaries** with key outcomes
+- **Historical analysis** of development patterns
+
+### Project Intelligence
+
+- **Technology detection** and stack analysis
+- **Dependency mapping** with security assessment
+- **Code quality metrics** and health scoring
+- **Architecture pattern recognition**
+- **Performance bottleneck identification**
+
+### Security & Safety
+
+- **Code execution sandboxing**
+- **Security vulnerability scanning**
+- **Safe file operations** with backup systems
+- **Command validation** and sanitization
+- **Environment isolation**
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```bash
+# Optional: Custom database location
+export BB7_DB_PATH="/custom/path/bb7_memory.db"
+
+# Optional: Logging level
+export BB7_LOG_LEVEL="INFO"
+
+# Optional: Session timeout (seconds)
+export BB7_SESSION_TIMEOUT="3600"
+```
+
+### Advanced Configuration
+
+Create `config.json` in project root:
+
+```json
+{
+  "database": {
+    "path": "data/bb7_memory.db",
+    "backup_enabled": true,
+    "backup_interval": 3600
+  },
+  "memory": {
+    "max_entries": 10000,
+    "auto_categorize": true,
+    "similarity_threshold": 0.7
+  },
+  "security": {
+    "safe_mode": true,
+    "allowed_commands": ["git", "npm", "pip"],
+    "restricted_paths": ["/etc", "/sys"]
+  }
+}
+```
+
+## 🌐 Remote Deployment
+
+For remote MCP server deployment (Claude Max/Team/Enterprise):
+
+### Option 1: FastAPI HTTP Server
+
+```python
+# Add to mcp_server.py
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+import uvicorn
+
+app = FastAPI()
+
+@app.post("/mcp")
+async def mcp_endpoint(request: dict):
+    # Handle MCP protocol over HTTP
+    pass
+
+@app.get("/mcp/sse")
+async def mcp_sse():
+    # Server-Sent Events endpoint
+    pass
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+```
+
+### Option 2: Cloud Deployment
+
+Deploy to major cloud platforms:
+
+- **Heroku**: `git push heroku main`
+- **AWS Lambda**: Use `serverless` framework
+- **Google Cloud Run**: Deploy containerized version
+- **Railway**: Connect GitHub repo for auto-deployment
+
+## 🧪 Testing
+
+### Unit Tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+### Integration Tests
+
+```bash
+python test_script.py
+```
+
+### Manual Testing
+
+```bash
+# Start server
+python mcp_server.py
+
+# Test in separate terminal
+echo '{"jsonrpc": "2.0", "method": "tools/list", "id": 1}' | python mcp_server.py
+```
+
+## 📝 Development Guide
+
+### Adding New Tools
+
+1. **Create tool function** in appropriate module:
+
+```python
+@mcp.tool()
+def bb7_your_tool(param: str) -> str:
+    """Your tool description."""
+    # Implementation
+    return result
+```
+
+2. **Register in main server**:
+
+```python
+# Add to mcp_server.py imports
+from your_module import bb7_your_tool
+```
+
+### Contributing
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/new-tool`
+3. Add comprehensive tests
+4. Update documentation
+5. Submit pull request
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**Server won't start:**
+
+```bash
+# Check Python path
+python --version  # Should be 3.11+
+
+# Verify dependencies
+pip install -r requirements.txt
+
+# Check logs
+tail -f mcp_server.log
+```
+
+**Tools not registering:**
+
+```bash
+# Enable debug logging
+export BB7_LOG_LEVEL="DEBUG"
+python mcp_server.py
+```
+
+**Memory system errors:**
+
+```bash
+# Reset database
+rm data/bb7_memory.db
+python mcp_server.py  # Will recreate
+```
+
+**Claude Desktop connection:**
+
+```bash
+# Verify config file
+cat ~/.config/Claude/claude_desktop_config.json  # Linux/Mac
+type %APPDATA%\Claude\claude_desktop_config.json  # Windows
+
+# Restart Claude Desktop after config changes
+```
+
+### Performance Optimization
+
+- **Memory usage**: Set `BB7_SESSION_TIMEOUT` for automatic cleanup
+- **Database size**: Use `bb7_memory_insights` to identify cleanup opportunities
+- **Response time**: Enable query caching in SQLite configuration
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## 📚 Documentation
+
+- **[Deep Dive Manual](documentation/Claude%20MCP%20Server%20Deep%20Dive%20How%20to%20Manual.md)** - Complete setup and usage guide
+- **[Architecture Diagram](mcp.mmd)** - Mermaid diagram of system architecture
+- **[API Reference](docs/api.md)** - Complete tool documentation
+- **[Examples](examples/)** - Usage examples and tutorials
+
+## 🔗 Related Projects
+
+- **[Model Context Protocol](https://modelcontextprotocol.io/)** - Official MCP specification
+- **[FastMCP](https://github.com/jlowin/fastmcp)** - FastMCP framework
+- **[Claude Desktop](https://claude.ai/download)** - Claude Desktop application
+
+## 💬 Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/claude-mcp-server/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/claude-mcp-server/discussions)
+- **Documentation**: [Wiki](https://github.com/yourusername/claude-mcp-server/wiki)
+
+---
+
+**Built with ❤️ for the Claude MCP ecosystem**
+
+*Transform Claude into your ultimate collaborative intelligence partner*
+
 - **bb7_execute_code_safely** - Safe code execution with analysis and insights
 
 ## 🏗️ Architecture
