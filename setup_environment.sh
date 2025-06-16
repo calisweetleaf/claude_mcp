@@ -1,10 +1,15 @@
 #!/bin/bash
 # Jules Environment Setup Script for Claude MCP Server
+<<<<<<< HEAD
 # Optimized for Jules's Linux VM environment with robust error handling
+=======
+# Optimized for Jules's Linux VM environment
+>>>>>>> 86262dfaf6f036dd6f054443cb6e21dc0091097f
 set -e
 
 echo "🔧 Setting up Claude MCP Server environment for Jules Linux VM..."
 
+<<<<<<< HEAD
 # Function for error handling
 handle_error() {
     echo "❌ Error on line $1: $2"
@@ -32,6 +37,9 @@ echo "📋 Detected Linux distribution type: $DISTRO"
 
 # Ensure we're working with Python 3.x (Jules VMs should have this)
 echo "🔍 Checking Python installation..."
+=======
+# Ensure we're working with Python 3.11+ (Jules VMs should have this)
+>>>>>>> 86262dfaf6f036dd6f054443cb6e21dc0091097f
 python3 --version
 if [ $? -ne 0 ]; then
     echo "❌ Python 3 not found. This is unexpected in Jules VM."
@@ -172,9 +180,15 @@ mkdir -p data/logs
 mkdir -p data/web_cache
 
 echo "🔧 Setting up file permissions..."
+<<<<<<< HEAD
 # Make main server executable (if files exist)
 [ -f mcp_server.py ] && chmod +x mcp_server.py || echo "⚠️ mcp_server.py not found"
 [ -f mcp_https_wrapper.py ] && chmod +x mcp_https_wrapper.py || echo "⚠️ mcp_https_wrapper.py not found"
+=======
+# Make main server executable
+chmod +x mcp_server.py
+chmod +x mcp_https_wrapper.py
+>>>>>>> 86262dfaf6f036dd6f054443cb6e21dc0091097f
 
 # Set proper permissions for data directories
 chmod 755 data/
@@ -202,7 +216,11 @@ try:
 except ImportError as e:
     print(f'❌ Import error: {e}')
     exit(1)
+<<<<<<< HEAD
 " || echo "⚠️ Basic functionality test failed, but continuing..."
+=======
+"
+>>>>>>> 86262dfaf6f036dd6f054443cb6e21dc0091097f
 
 echo "🔧 Setting environment variables for Jules session..."
 # Set environment variables that might be needed
@@ -213,6 +231,7 @@ export FASTMCP_DEBUG="false"
 echo "📋 Environment verification complete!"
 echo "📊 Python version: $(python --version)"
 echo "📍 Working directory: $(pwd)"
+<<<<<<< HEAD
 echo "💾 Available disk space: $(df -h . | tail -1 | awk '{print $4}' 2>/dev/null || echo 'Unknown')"
 echo "🧠 Available memory: $(free -h 2>/dev/null | grep Mem | awk '{print $7}' || echo 'Unknown')"
 
@@ -246,6 +265,14 @@ else
     echo "🎯 Jules can attempt to work, but may encounter dependency problems"
 fi
 
+=======
+echo "💾 Available disk space: $(df -h . | tail -1 | awk '{print $4}')"
+echo "🧠 Available memory: $(free -h | grep Mem | awk '{print $7}')"
+
+echo ""
+echo "✅ Claude MCP Server environment ready for Jules!"
+echo "🎯 Jules can now work on the codebase with all dependencies installed"
+>>>>>>> 86262dfaf6f036dd6f054443cb6e21dc0091097f
 echo ""
 echo "🔍 Key capabilities enabled:"
 echo "  • FastMCP server with 39+ bb7_ tools"
