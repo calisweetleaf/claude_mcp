@@ -112,7 +112,7 @@ def test_tool_methods():
         from code_analysis_tool import CodeAnalysisTool
         tool = CodeAnalysisTool()
         # Just check instantiation and method presence
-        assert hasattr(tool, 'bb7_analyze_code_complete')
+        assert hasattr(tool, 'bb7_analyze_code')
         print("  ✅ CodeAnalysisTool methods present")
     except Exception as e:
         print(f"  ❌ CodeAnalysisTool method test failed: {e}")

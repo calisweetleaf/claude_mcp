@@ -28,9 +28,13 @@ import logging
 import tempfile
 import threading
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime, timedelta
-import winreg
+
+try:
+    import winreg  # Windows registry access
+except ImportError:  # Not on Windows
+    winreg = None
 import psutil
 import shutil
 from concurrent.futures import ThreadPoolExecutor
